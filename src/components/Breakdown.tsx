@@ -84,9 +84,7 @@ export function BreakdownDisplay({ breakdown, period }: BreakdownProps) {
           <div className="flex justify-between">
             <span>
               BPJS JP (1%)
-              {isAnnual
-                ? breakdown.annual.employee.jp > 1155600 && ` (capped)`
-                : breakdown.jpCapped && ` (cap ${formatRupiah(JP_CAP)})`}
+              {breakdown.jpCapped && ` (cap ${formatRupiah(JP_CAP)})`}
             </span>
             <span className="text-red-600">
               −{formatRp(
@@ -140,9 +138,7 @@ export function BreakdownDisplay({ breakdown, period }: BreakdownProps) {
           <div className="flex justify-between">
             <span>
               BPJS JP (2%)
-              {isAnnual
-                ? breakdown.annual.employer.jp > 1155600 && ` (capped)`
-                : breakdown.jpCapped && ` (cap ${formatRupiah(JP_CAP)})`}
+              {breakdown.jpCapped && ` (cap ${formatRupiah(JP_CAP)})`}
             </span>
             <span>
               {formatRp(

@@ -6,6 +6,10 @@ dist
 src/**/*.js
 src/**/*.d.ts
 !src/vite-env.d.ts
+vite.config.js
+vite.config.d.ts
+
+.claude/settings.local.json
 
 .DS_Store
 *.log
