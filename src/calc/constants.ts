@@ -2,6 +2,22 @@ export type PtkpStatus = 'TK/0' | 'TK/1' | 'TK/2' | 'TK/3' | 'K/0' | 'K/1' | 'K/
 export type TerCategory = 'A' | 'B' | 'C';
 export type Period = 'monthly' | 'annually';
 
+export interface AnnualBreakdown {
+  gross: number;
+  biayaJabatan: number;
+  employee: { kesehatan: number; jht: number; jp: number };
+  employer: { kesehatan: number; jht: number; jp: number; jkk: number; jkm: number };
+  penghasilanNeto: number;
+  ptkp: number;
+  pkp: number;
+  pph21Annual: number;
+  pph21JanNov: number;
+  pph21December: number;
+  totalEmployeeDeduction: number;
+  net: number;
+  totalCostToCompany: number;
+}
+
 export interface Breakdown {
   gross: number;
   terRate: number;
@@ -13,10 +29,14 @@ export interface Breakdown {
   totalCostToCompany: number;
   jpCapped: boolean;
   kesehatanCapped: boolean;
+  annual: AnnualBreakdown;
 }
 
 // BPJS rates and caps
 export const KESEHATAN_CAP = 12_000_000;
+// JP_CAP: BPJS Jaminan Pensiun wage ceiling per PP 45/2015 (revised annually by
+// Menteri Ketenagakerjaan decree). Value below is the 2024/2025 figure.
+// TODO: re-verify each January against the latest BPJS Ketenagakerjaan release.
 export const JP_CAP = 9_559_600;
 
 export const BPJS_KESEHATAN_EMPLOYEE_RATE = 0.01;
@@ -27,6 +47,36 @@ export const BPJS_JP_EMPLOYEE_RATE = 0.01;
 export const BPJS_JP_EMPLOYER_RATE = 0.02;
 export const BPJS_JKK_EMPLOYER_RATE = 0.0024;
 export const BPJS_JKM_EMPLOYER_RATE = 0.003;
+
+// Biaya jabatan (Per PMK 250/PMK.03/2008, unchanged)
+export const BIAYA_JABATAN_RATE = 0.05;
+export const BIAYA_JABATAN_ANNUAL_CAP = 6_000_000; // 500k × 12
+
+// PTKP annual amounts per Pasal 7 UU PPh (unchanged since 2016)
+export const PTKP_ANNUAL: Record<PtkpStatus, number> = {
+  'TK/0':  54_000_000,
+  'TK/1':  58_500_000,
+  'TK/2':  63_000_000,
+  'TK/3':  67_500_000,
+  'K/0':   58_500_000,
+  'K/1':   63_000_000,
+  'K/2':   67_500_000,
+  'K/3':   72_000_000,
+};
+
+// Pasal 17 progressive brackets (UU HPP 7/2021, effective 2022)
+export interface ProgressiveBracket {
+  upTo: number;
+  rate: number;
+}
+
+export const PASAL_17_BRACKETS: ProgressiveBracket[] = [
+  { upTo:    60_000_000, rate: 0.05 },
+  { upTo:   250_000_000, rate: 0.15 },
+  { upTo:   500_000_000, rate: 0.25 },
+  { upTo: 5_000_000_000, rate: 0.30 },
+  { upTo:      Infinity, rate: 0.35 },
+];
 
 // PTKP status to TER category mapping per PMK 168/2023 (SPEC.md §3 Step 1)
 // Categories group PTKP statuses: A = PTKP ≤ 58.5M, B = 63-67.5M, C = 72M
@@ -91,7 +141,9 @@ export const TER_BRACKETS_A: TerBracket[] = [
 ];
 
 // Category B: TK/2, TK/3, K/1, K/2 (PMK 168/2023 Lampiran B)
-// Medium PTKP → medium effective rates. Approximate — verify against official PMK PDF.
+// Lower/mid rows are best-effort readings of PMK Lampiran B. Upper rows (≥ 0.27)
+// are interpolated from Cat A's shape to avoid discontinuities.
+// TODO (Phase 3): replace all B and C rows with verbatim values from the official PMK 168/2023 PDF.
 export const TER_BRACKETS_B: TerBracket[] = [
   { upTo: 6_200_000, rate: 0 },
   { upTo: 6_500_000, rate: 0.0025 },
@@ -129,11 +181,13 @@ export const TER_BRACKETS_B: TerBracket[] = [
   { upTo: 169_000_000, rate: 0.24 },
   { upTo: 221_000_000, rate: 0.25 },
   { upTo: 354_000_000, rate: 0.26 },
-  { upTo: Infinity, rate: 0.3 },
+  { upTo: 437_000_000, rate: 0.27 },
+  { upTo: 540_000_000, rate: 0.28 },
+  { upTo: Infinity, rate: 0.30 },
 ];
 
 // Category C: K/3 (PMK 168/2023 Lampiran C)
-// Highest PTKP → lowest effective rates. Approximate — verify against official PMK PDF.
+// Lower/mid rows are best-effort readings. Upper rows (≥ 0.26) are interpolated.
 export const TER_BRACKETS_C: TerBracket[] = [
   { upTo: 6_600_000, rate: 0 },
   { upTo: 6_950_000, rate: 0.0025 },
@@ -170,5 +224,8 @@ export const TER_BRACKETS_C: TerBracket[] = [
   { upTo: 169_000_000, rate: 0.23 },
   { upTo: 221_000_000, rate: 0.24 },
   { upTo: 354_000_000, rate: 0.25 },
-  { upTo: Infinity, rate: 0.3 },
+  { upTo: 437_000_000, rate: 0.26 },
+  { upTo: 540_000_000, rate: 0.27 },
+  { upTo: 667_000_000, rate: 0.28 },
+  { upTo: Infinity, rate: 0.30 },
 ];

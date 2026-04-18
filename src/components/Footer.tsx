@@ -44,11 +44,12 @@ export function Footer() {
         does not constitute tax or legal advice.
       </p>
       <p className="leading-relaxed">
-        <span className="font-semibold text-gray-700">Annual figures</span> are monthly × 12.
-        The <span className="font-semibold">December reconciliation</span> required by PMK
-        168/2023 (annual progressive Pasal 17 tax on PKP after biaya jabatan and PTKP, minus
-        Jan–Nov TER withholdings) is not modeled — actual year-end PPh 21 may differ from
-        the displayed figure.
+        <span className="font-semibold text-gray-700">Annual figures</span> include the PMK
+        168/2023 December reconciliation: Jan–Nov PPh 21 uses the monthly TER rate; December
+        shows the difference between the progressive Pasal 17 annual tax (on PKP = gross −
+        biaya jabatan − JHT employee − JP employee − PTKP, rounded down to the nearest Rp
+        1,000) and the sum of Jan–Nov TER withholdings. BPJS Kesehatan employee contribution
+        is treated as non-deductible for PPh 21 per the conservative DJP interpretation.
       </p>
       <div>
         <div className="font-semibold text-gray-700 mb-1">Regulations referenced:</div>

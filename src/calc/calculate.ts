@@ -1,6 +1,7 @@
 import { Breakdown, PtkpStatus } from './constants';
 import { lookupTerRate } from './ter';
 import { computeBpjs } from './bpjs';
+import { computeAnnual } from './annual';
 
 export function calculate(grossMonthly: number, ptkpStatus: PtkpStatus): Breakdown {
   const bpjs = computeBpjs(grossMonthly);
@@ -21,6 +22,8 @@ export function calculate(grossMonthly: number, ptkpStatus: PtkpStatus): Breakdo
 
   const totalCostToCompany = grossMonthly + totalEmployerContribution;
 
+  const annual = computeAnnual(grossMonthly, ptkpStatus, bpjs, pph21);
+
   return {
     gross: grossMonthly,
     terRate,
@@ -32,5 +35,6 @@ export function calculate(grossMonthly: number, ptkpStatus: PtkpStatus): Breakdo
     totalCostToCompany,
     jpCapped: bpjs.jpCapped,
     kesehatanCapped: bpjs.kesehatanCapped,
+    annual,
   };
 }

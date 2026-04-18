@@ -186,13 +186,61 @@ Display two columns: **Monthly** and **Annual** (annual = monthly × 12), contro
 
 ---
 
-## Out of Scope (Phase 2+)
+## December Reconciliation (Implemented)
 
-- PTKP detail editing beyond status code
-- NPWP vs non-NPWP surcharge
-- Variable JKK rates by industry
-- THR / bonus calculation
-- December PPh 21 reconciliation
-- Multi-component salary (base + allowances)
-- PDF export
-- Save/share result
+The app now models the December PPh 21 reconciliation required by PMK 168/2023:
+
+**Formula:**
+```
+Biaya Jabatan = min(5% × annual gross, Rp 6,000,000)
+Penghasilan Neto = annual gross − biaya jabatan − employee JHT − employee JP
+PKP = max(0, penghasilan neto − PTKP), rounded down to nearest 1,000
+PPh 21 Annual = applyProgressive(PKP, Pasal 17 brackets)
+PPh 21 January–November = monthly TER rate × 11
+PPh 21 December = PPh 21 Annual − PPh 21 January–November
+```
+
+**Pasal 17 Progressive Brackets (UU HPP 7/2021):**
+
+| PKP (Annual, Rp) | Rate |
+|---|---|
+| 0 – 60,000,000 | 5% |
+| 60,000,001 – 250,000,000 | 15% |
+| 250,000,001 – 500,000,000 | 25% |
+| 500,000,001 – 5,000,000,000 | 30% |
+| > 5,000,000,000 | 35% |
+
+**Annual View:**
+- Gross Salary (annualized)
+- PPh 21 Jan–Nov (TER × 11)
+- PPh 21 December (reconciliation delta; may be negative/refund)
+- PPh 21 Annual Total
+- BPJS (annualized)
+- Net Take-Home
+
+**Example:** Gross Rp 10M/month, TK/0:
+- Annual gross: Rp 120M
+- Biaya jabatan: Rp 6M (capped)
+- Employee JHT: Rp 480k
+- Employee JP: Rp 1,147.152k (capped)
+- Penghasilan neto: Rp 112.372.848k
+- PTKP: Rp 54M
+- PKP: Rp 58.372.000k (rounded)
+- Progressive annual: Rp 2.918.600k
+- TER Jan–Nov: Rp 200k × 11 = Rp 2.2M
+- December: +Rp 718.600k (additional tax owed)
+
+**BPJS Kesehatan treatment:** Employee contribution (1%) is **not deductible** for PPh 21 calculation per conservative DJP interpretation (Per-Dirjen PER-16/PJ/2016).
+
+---
+
+## Out of Scope (Next Phases)
+
+- **THR / Bonus calculation** — Holiday allowance (typically 1× monthly gross) is paid in December with separate tax withholding; not modeled. Employer withholding on THR occurs independently of salary reconciliation.
+- **Alternative withholding methods** — App assumes TER Jan–Nov → progressive reconciliation in December. Some employers use progressive monthly withholding or hybrid methods; actual Jan–Nov PPh 21 may differ slightly from TER.
+- **TER Lampiran B & C full transcription** — Category B and C brackets are interpolated for upper rates (27–29% in B; 26–29% in C) to avoid discontinuities. Full verbatim values from official PMK 168/2023 PDF deferred.
+- **PTKP detail editing beyond status code**
+- **NPWP vs non-NPWP surcharge** (20% surcharge for non-filers)
+- **Variable JKK rates by industry** (currently fixed at 0.24%, low-risk tier)
+- **Multi-component salary** (base + allowances, separate deductions)
+- **PDF export, save/share results**
