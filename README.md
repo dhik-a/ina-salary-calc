@@ -10,7 +10,7 @@ All calculations run client-side. No data leaves the browser.
 
 - Vite 5 + React 18 + TypeScript
 - Tailwind CSS 3
-- Vitest 1 (87 parametric tests across all 8 PTKP statuses)
+- Vitest 1 (124 tests: 87 monthly + 37 annual scenarios across all 8 PTKP statuses)
 
 ## What it calculates
 
@@ -37,6 +37,29 @@ Statuses within the same category produce identical results by design of the
 TER system — this is not a bug. See `src/calc/calc.test.ts` for the full
 behavioural spec.
 
+## Architecture
+
+**Domain-driven separation:** All salary calculation logic is pure functions in
+`src/calc/` with zero React dependencies. Tax rules, BPJS rates, and caps are
+structured data in `constants.ts` (not hardcoded inline). The UI layer
+(`src/components/`) is presentational — it receives calculated results and
+renders them. This separation makes the domain reusable (frontend, backend,
+CLI, etc.) and testable without React.
+
+```
+src/
+├── calc/
+│   ├── calculate.ts      (main entry: (gross, ptkp) → Breakdown)
+│   ├── annual.ts         (December reconciliation, progressive tax)
+│   ├── bpjs.ts           (BPJS contributions)
+│   ├── ter.ts            (TER bracket lookup)
+│   ├── constants.ts      (all tax rules as data)
+│   ├── calc.test.ts      (87 tests)
+│   └── annual.test.ts    (37 tests)
+└── components/
+    └── (presentational React components)
+```
+
 ## Scripts
 
 ```sh
@@ -47,19 +70,30 @@ npm run build      # typecheck + production build
 npm run preview    # preview production build
 ```
 
-## Known limitations (Phase 1)
+## Features
 
-- **TER bracket values** are a best-effort reading of PMK 168/2023 Lampiran
-  A/B/C. Exact transcription from the official PDF is tracked as Phase 2
-  work — cross-check against official sources before using for payroll.
-- **Annual figures = monthly × 12.** The December reconciliation required by
-  PMK 168/2023 (annual progressive Pasal 17 tax on PKP after biaya jabatan
-  and PTKP, minus Jan–Nov TER withholdings) is not modelled — actual
-  year-end PPh 21 may differ slightly from the displayed figure.
-- **JKK rate** is fixed at the 0.24% tier (low-risk). Actual rate varies by
+- ✅ **Monthly and annual calculations** — annual view includes PMK 168/2023
+  December reconciliation (progressive Pasal 17 tax on PKP minus Jan–Nov TER
+  withholdings).
+- ✅ **Continuous TER brackets** — categories A/B/C upper brackets (27–30% in B,
+  26–30% in C) are interpolated from category A's shape to fill gaps.
+- ✅ **Employer contributions** — informational view of total cost to company
+  (gross + BPJS).
+- ✅ **Comprehensive test coverage** — 124 unit tests covering all bracket
+  boundaries, PKP rounding, biaya jabatan cap, and reconciliation scenarios.
+
+## Known limitations
+
+- **TER bracket interpolation** — categories B and C upper rows (≥0.27 in B,
+  ≥0.26 in C) are interpolated from category A's pattern to avoid
+  discontinuities. Full verbatim transcription from the official PMK 168/2023
+  PDF is deferred. Cross-check against official sources before using for
+  payroll.
+- **JKK rate** — fixed at the 0.24% tier (low-risk). Actual rate varies by
   industry risk classification (0.24%–1.74%).
-- **Out of scope:** NPWP surcharge, THR, variable JKK tiers, expatriate
-  PTKP rules.
+- **Out of scope:** NPWP surcharge (20% for non-NPWP filers), THR (holiday
+  allowance), variable JKK tiers, multi-component salary, expatriate PTKP
+  rules, scenario simulation.
 
 ## Disclaimer
 
