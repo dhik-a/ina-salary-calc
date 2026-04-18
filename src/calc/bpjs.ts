@@ -23,17 +23,17 @@ export function computeBpjs(grossMonthly: number): BpjsResult {
   const basisKesehatan = Math.min(grossMonthly, KESEHATAN_CAP);
   const basisJp = Math.min(grossMonthly, JP_CAP);
 
-  // Employee contributions
-  const employeeKesehatan = basisKesehatan * BPJS_KESEHATAN_EMPLOYEE_RATE;
-  const employeeJht = grossMonthly * BPJS_JHT_EMPLOYEE_RATE;
-  const employeeJp = basisJp * BPJS_JP_EMPLOYEE_RATE;
+  // Employee contributions — rounded to integer rupiah
+  const employeeKesehatan = Math.round(basisKesehatan * BPJS_KESEHATAN_EMPLOYEE_RATE);
+  const employeeJht = Math.round(grossMonthly * BPJS_JHT_EMPLOYEE_RATE);
+  const employeeJp = Math.round(basisJp * BPJS_JP_EMPLOYEE_RATE);
 
-  // Employer contributions
-  const employerKesehatan = basisKesehatan * BPJS_KESEHATAN_EMPLOYER_RATE;
-  const employerJht = grossMonthly * BPJS_JHT_EMPLOYER_RATE;
-  const employerJp = basisJp * BPJS_JP_EMPLOYER_RATE;
-  const employerJkk = grossMonthly * BPJS_JKK_EMPLOYER_RATE;
-  const employerJkm = grossMonthly * BPJS_JKM_EMPLOYER_RATE;
+  // Employer contributions — rounded to integer rupiah
+  const employerKesehatan = Math.round(basisKesehatan * BPJS_KESEHATAN_EMPLOYER_RATE);
+  const employerJht = Math.round(grossMonthly * BPJS_JHT_EMPLOYER_RATE);
+  const employerJp = Math.round(basisJp * BPJS_JP_EMPLOYER_RATE);
+  const employerJkk = Math.round(grossMonthly * BPJS_JKK_EMPLOYER_RATE);
+  const employerJkm = Math.round(grossMonthly * BPJS_JKM_EMPLOYER_RATE);
 
   return {
     employee: { kesehatan: employeeKesehatan, jht: employeeJht, jp: employeeJp },

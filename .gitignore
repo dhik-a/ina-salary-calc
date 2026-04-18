@@ -1,0 +1,11 @@
+node_modules
+dist
+*.tsbuildinfo
+
+# emitted by accidental `tsc` without noEmit
+src/**/*.js
+src/**/*.d.ts
+!src/vite-env.d.ts
+
+.DS_Store
+*.log

@@ -1,15 +1,16 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { PtkpStatus, Period } from './calc/constants';
 import { calculate } from './calc/calculate';
 import { SalaryForm } from './components/SalaryForm';
-import { Breakdown } from './components/Breakdown';
+import { BreakdownDisplay } from './components/Breakdown';
+import { Footer } from './components/Footer';
 
 function App() {
   const [gross, setGross] = useState(0);
   const [ptkp, setPtkp] = useState<PtkpStatus>('TK/0');
   const [period, setPeriod] = useState<Period>('monthly');
 
-  const breakdown = useMemo(() => calculate(gross, ptkp), [gross, ptkp]);
+  const breakdown = calculate(gross, ptkp);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-8 px-4">
@@ -40,11 +41,12 @@ function App() {
                   Enter a gross salary to see the breakdown
                 </div>
               ) : (
-                <Breakdown breakdown={breakdown} period={period} />
+                <BreakdownDisplay breakdown={breakdown} period={period} />
               )}
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { PtkpStatus, Period } from '../calc/constants';
 import { CurrencyInput } from './CurrencyInput';
 import { PeriodToggle } from './PeriodToggle';
@@ -21,6 +22,8 @@ export function SalaryForm({
   period,
   onPeriodChange,
 }: SalaryFormProps) {
+  const ptkpId = useId();
+
   return (
     <div className="space-y-4">
       <CurrencyInput
@@ -30,8 +33,11 @@ export function SalaryForm({
       />
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">PTKP Status</label>
+        <label htmlFor={ptkpId} className="block text-sm font-medium text-gray-700 mb-2">
+          PTKP Status
+        </label>
         <select
+          id={ptkpId}
           value={ptkp}
           onChange={(e) => onPtkpChange(e.target.value as PtkpStatus)}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"

@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { parseRupiahInput, formatRupiah } from '../calc/format';
 
 interface CurrencyInputProps {
@@ -7,6 +8,8 @@ interface CurrencyInputProps {
 }
 
 export function CurrencyInput({ value, onChange, label }: CurrencyInputProps) {
+  const id = useId();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const parsed = parseRupiahInput(e.target.value);
     onChange(parsed);
@@ -14,8 +17,13 @@ export function CurrencyInput({ value, onChange, label }: CurrencyInputProps) {
 
   return (
     <div>
-      {label && <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>}
+      {label && (
+        <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
+          {label}
+        </label>
+      )}
       <input
+        id={id}
         type="text"
         inputMode="numeric"
         value={value === 0 ? '' : formatRupiah(value)}

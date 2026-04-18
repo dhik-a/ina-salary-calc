@@ -5,7 +5,7 @@ import { computeBpjs } from './bpjs';
 export function calculate(grossMonthly: number, ptkpStatus: PtkpStatus): Breakdown {
   const bpjs = computeBpjs(grossMonthly);
   const terRate = lookupTerRate(grossMonthly, ptkpStatus);
-  const pph21 = grossMonthly * terRate;
+  const pph21 = Math.round(grossMonthly * terRate);
 
   const totalEmployeeDeduction =
     bpjs.employee.kesehatan + bpjs.employee.jht + bpjs.employee.jp + pph21;
