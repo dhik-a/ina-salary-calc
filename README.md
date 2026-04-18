@@ -47,7 +47,7 @@ npm run build      # typecheck + production build
 npm run preview    # preview production build
 ```
 
-## Known limitations (Phase 1)
+## Known limitations
 
 - **TER bracket values** are a best-effort reading of PMK 168/2023 Lampiran
   A/B/C. Exact transcription from the official PDF is tracked as Phase 2
