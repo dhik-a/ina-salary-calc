@@ -1,4 +1,5 @@
 import { Period } from '../calc/constants';
+import { useLang } from '../i18n/useLang';
 
 interface PeriodToggleProps {
   value: Period;
@@ -6,6 +7,7 @@ interface PeriodToggleProps {
 }
 
 export function PeriodToggle({ value, onChange }: PeriodToggleProps) {
+  const { t } = useLang();
   return (
     <div className="flex gap-2">
       <button
@@ -16,7 +18,7 @@ export function PeriodToggle({ value, onChange }: PeriodToggleProps) {
             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
         }`}
       >
-        Monthly
+        {t('monthly')}
       </button>
       <button
         onClick={() => onChange('annually')}
@@ -26,7 +28,7 @@ export function PeriodToggle({ value, onChange }: PeriodToggleProps) {
             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
         }`}
       >
-        Annually
+        {t('annually')}
       </button>
     </div>
   );
