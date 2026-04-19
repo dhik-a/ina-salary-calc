@@ -1,58 +1,56 @@
+import { useLang } from '../i18n/useLang';
+
 interface RegulationLink {
+  labelKey: 'regPmk168' | 'regPerpres64' | 'regPp44' | 'regPp45' | 'regPp46';
   label: string;
   url: string;
-  description: string;
 }
 
 const REGULATIONS: RegulationLink[] = [
   {
+    labelKey: 'regPmk168',
     label: 'PMK 168/2023',
     url: 'https://peraturan.bpk.go.id/Details/276089/pmk-no-168-tahun-2023',
-    description: 'PPh 21 TER method',
   },
   {
+    labelKey: 'regPerpres64',
     label: 'Perpres 64/2020',
     url: 'https://peraturan.bpk.go.id/Details/135972/perpres-no-64-tahun-2020',
-    description: 'BPJS Kesehatan',
   },
   {
+    labelKey: 'regPp44',
     label: 'PP 44/2015',
     url: 'https://peraturan.bpk.go.id/Details/5709/pp-no-44-tahun-2015',
-    description: 'JKK & JKM',
   },
   {
+    labelKey: 'regPp45',
     label: 'PP 45/2015',
     url: 'https://peraturan.bpk.go.id/Details/5710/pp-no-45-tahun-2015',
-    description: 'Jaminan Pensiun (JP)',
   },
   {
+    labelKey: 'regPp46',
     label: 'PP 46/2015',
     url: 'https://peraturan.bpk.go.id/Details/5711/pp-no-46-tahun-2015',
-    description: 'Jaminan Hari Tua (JHT)',
   },
 ];
 
 export function Footer() {
+  const { t } = useLang();
+
   return (
     <footer className="max-w-2xl mx-auto mt-6 text-xs text-gray-500 space-y-3 px-2">
       <p className="leading-relaxed">
-        <span className="font-semibold text-gray-700">Disclaimer:</span> TER bracket values
-        are based on a best-effort reading of PMK 168/2023. Tax rates, PTKP amounts, BPJS
-        rates, and wage caps are <span className="font-semibold">subject to change</span> as
-        Indonesian regulations are updated — always verify against the latest official sources
-        before using for payroll decisions. This tool is for informational purposes only and
-        does not constitute tax or legal advice.
+        <span className="font-semibold text-gray-700">{t('disclaimerLabel')}</span>{' '}
+        {t('disclaimerText1')}
+        <span className="font-semibold">{t('disclaimerBold')}</span>
+        {t('disclaimerText2')}
       </p>
       <p className="leading-relaxed">
-        <span className="font-semibold text-gray-700">Annual figures</span> include the PMK
-        168/2023 December reconciliation: Jan–Nov PPh 21 uses the monthly TER rate; December
-        shows the difference between the progressive Pasal 17 annual tax (on PKP = gross −
-        biaya jabatan − JHT employee − JP employee − PTKP, rounded down to the nearest Rp
-        1,000) and the sum of Jan–Nov TER withholdings. BPJS Kesehatan employee contribution
-        is treated as non-deductible for PPh 21 per the conservative DJP interpretation.
+        <span className="font-semibold text-gray-700">{t('annualLabel')}</span>
+        {t('annualText')}
       </p>
       <div>
-        <div className="font-semibold text-gray-700 mb-1">Regulations referenced:</div>
+        <div className="font-semibold text-gray-700 mb-1">{t('regulationsLabel')}</div>
         <ul className="space-y-1">
           {REGULATIONS.map((reg) => (
             <li key={reg.label}>
@@ -65,7 +63,7 @@ export function Footer() {
                 {reg.label}
               </a>
               {' — '}
-              <span>{reg.description}</span>
+              <span>{t(reg.labelKey)}</span>
             </li>
           ))}
         </ul>

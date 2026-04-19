@@ -1,4 +1,5 @@
 import { ThrType } from '../calc/constants';
+import { useLang } from '../i18n/useLang';
 
 interface ThrToggleProps {
   value: ThrType;
@@ -6,6 +7,7 @@ interface ThrToggleProps {
 }
 
 export function ThrToggle({ value, onChange }: ThrToggleProps) {
+  const { t } = useLang();
   return (
     <div className="flex gap-2">
       <button
@@ -16,7 +18,7 @@ export function ThrToggle({ value, onChange }: ThrToggleProps) {
             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
         }`}
       >
-        Full (≥12 months)
+        {t('thrFull')}
       </button>
       <button
         onClick={() => onChange('prorated')}
@@ -26,7 +28,7 @@ export function ThrToggle({ value, onChange }: ThrToggleProps) {
             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
         }`}
       >
-        Pro-rated (&lt;12 months)
+        {t('thrProrated')}
       </button>
     </div>
   );

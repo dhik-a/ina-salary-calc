@@ -3,6 +3,7 @@ import { PtkpStatus, Period, ThrType } from '../calc/constants';
 import { CurrencyInput } from './CurrencyInput';
 import { PeriodToggle } from './PeriodToggle';
 import { ThrToggle } from './ThrToggle';
+import { useLang } from '../i18n/useLang';
 
 interface SalaryFormProps {
   gross: number;
@@ -37,18 +38,19 @@ export function SalaryForm({
 }: SalaryFormProps) {
   const ptkpId = useId();
   const thrMonthsId = useId();
+  const { t } = useLang();
 
   return (
     <div className="space-y-4">
       <CurrencyInput
         value={gross}
         onChange={onGrossChange}
-        label="Gross Salary (Monthly)"
+        label={t('grossSalaryLabel')}
       />
 
       <div>
         <label htmlFor={ptkpId} className="block text-sm font-medium text-gray-700 mb-2">
-          PTKP Status
+          {t('ptkpStatusLabel')}
         </label>
         <select
           id={ptkpId}
@@ -65,7 +67,7 @@ export function SalaryForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Display Period</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">{t('displayPeriodLabel')}</label>
         <PeriodToggle value={period} onChange={onPeriodChange} />
       </div>
 
@@ -78,7 +80,7 @@ export function SalaryForm({
               onChange={(e) => onIncludeThrChange(e.target.checked)}
               className="rounded"
             />
-            <span className="text-sm font-medium text-gray-700">Include THR (religious holiday allowance)</span>
+            <span className="text-sm font-medium text-gray-700">{t('includeThrLabel')}</span>
           </label>
           {includeThr && (
             <>
@@ -86,7 +88,7 @@ export function SalaryForm({
               {thrType === 'prorated' && (
                 <div>
                   <label htmlFor={thrMonthsId} className="block text-xs font-medium text-gray-600 mb-2">
-                    Months worked (1–11)
+                    {t('monthsWorkedLabel')}
                   </label>
                   <input
                     id={thrMonthsId}

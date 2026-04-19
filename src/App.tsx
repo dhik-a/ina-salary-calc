@@ -4,14 +4,18 @@ import { calculate } from './calc/calculate';
 import { SalaryForm } from './components/SalaryForm';
 import { BreakdownDisplay } from './components/Breakdown';
 import { Footer } from './components/Footer';
+import { LanguageProvider } from './i18n/LanguageContext';
+import { LanguageToggle } from './components/LanguageToggle';
+import { useLang } from './i18n/useLang';
 
-function App() {
+function AppInner() {
   const [gross, setGross] = useState(0);
   const [ptkp, setPtkp] = useState<PtkpStatus>('TK/0');
   const [period, setPeriod] = useState<Period>('monthly');
   const [includeThr, setIncludeThr] = useState(false);
   const [thrType, setThrType] = useState<ThrType>('full');
   const [thrMonthsWorked, setThrMonthsWorked] = useState(11);
+  const { t, lang, setLang } = useLang();
 
   const breakdown = calculate(gross, ptkp, {
     include: includeThr,
@@ -23,13 +27,18 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Salary Calculator</h1>
-          <p className="text-gray-600 mb-6">Indonesian net salary calculator</p>
+          <div className="flex justify-between items-start mb-2">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800">{t('appTitle')}</h1>
+              <p className="text-gray-600">{t('appSubtitle')}</p>
+            </div>
+            <LanguageToggle value={lang} onChange={setLang} />
+          </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 mt-6">
             {/* Form */}
             <div>
-              <h2 className="text-lg font-semibold text-gray-700 mb-4">Input</h2>
+              <h2 className="text-lg font-semibold text-gray-700 mb-4">{t('inputHeading')}</h2>
               <SalaryForm
                 gross={gross}
                 onGrossChange={setGross}
@@ -48,10 +57,10 @@ function App() {
 
             {/* Breakdown */}
             <div>
-              <h2 className="text-lg font-semibold text-gray-700 mb-4">Breakdown</h2>
+              <h2 className="text-lg font-semibold text-gray-700 mb-4">{t('breakdownHeading')}</h2>
               {gross === 0 ? (
                 <div className="bg-gray-100 p-6 rounded-lg text-center text-gray-500">
-                  Enter a gross salary to see the breakdown
+                  {t('emptyState')}
                 </div>
               ) : (
                 <BreakdownDisplay breakdown={breakdown} period={period} />
@@ -62,6 +71,14 @@ function App() {
         <Footer />
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <LanguageProvider>
+      <AppInner />
+    </LanguageProvider>
   );
 }
 
