@@ -1,9 +1,18 @@
 export type PtkpStatus = 'TK/0' | 'TK/1' | 'TK/2' | 'TK/3' | 'K/0' | 'K/1' | 'K/2' | 'K/3';
 export type TerCategory = 'A' | 'B' | 'C';
 export type Period = 'monthly' | 'annually';
+export type ThrType = 'full' | 'prorated';
+
+export interface ThrOptions {
+  include: boolean;
+  type: ThrType;
+  monthsWorked: number; // 1..11, only used when type === 'prorated'
+}
 
 export interface AnnualBreakdown {
   gross: number;
+  thr: number;
+  grossIncludingThr: number;
   biayaJabatan: number;
   employee: { kesehatan: number; jht: number; jp: number };
   employer: { kesehatan: number; jht: number; jp: number; jkk: number; jkm: number };

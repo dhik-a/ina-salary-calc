@@ -234,13 +234,43 @@ PPh 21 December = PPh 21 Annual − PPh 21 January–November
 
 ---
 
+## THR (Tunjangan Hari Raya) — Implemented
+
+The app now models **THR** (religious holiday allowance), required by Permenaker 6/2016.
+
+**Regulation:**
+- Employees with ≥12 months tenure: 1× monthly salary.
+- Employees with <12 months tenure: (months_worked / 12) × 1 monthly salary.
+
+**Tax treatment:**
+- THR is subject to PPh 21 but **not** to BPJS (BPJS wage basis excludes non-recurring bonuses).
+- In this calculator, the tax impact is folded into the annual progressive calculation:
+  - Annual gross for tax purposes = `(salary × 12) + THR`
+  - This feeds into biaya jabatan → PKP → progressive Pasal 17 → annual PPh 21
+  - Jan–Nov TER stays based on salary alone (11 months)
+  - The THR-driven tax increase lands in the December reconciliation line
+
+**UI:**
+- THR controls appear **only** in the annual view
+- Checkbox: "Include THR"
+- Type selector: Full (≥12 months) or Pro-rated (<12 months)
+- When pro-rated: numeric input for months worked (1–11)
+
+**Example:** Gross 10M/mo TK/0 with THR full:
+- Annual gross: 120M + 10M = 130M
+- Biaya jabatan: 6M (capped)
+- Penghasilan neto, PKP, progressive annual tax all reflect the higher income
+- PPh 21 Annual is ≈1.3M higher than without THR (due to progressive brackets)
+
+---
+
 ## Out of Scope (Next Phases)
 
-- **THR / Bonus calculation** — Holiday allowance (typically 1× monthly gross) is paid in December with separate tax withholding; not modeled. Employer withholding on THR occurs independently of salary reconciliation.
-- **Alternative withholding methods** — App assumes TER Jan–Nov → progressive reconciliation in December. Some employers use progressive monthly withholding or hybrid methods; actual Jan–Nov PPh 21 may differ slightly from TER.
+- **Alternative withholding methods** — App assumes TER Jan–Nov → progressive reconciliation in December (with THR impact lumped into December). Some employers use progressive monthly withholding or month-specific THR withholding; actual Jan–Nov PPh 21 may differ slightly from TER.
 - **TER Lampiran B & C full transcription** — Category B and C brackets are interpolated for upper rates (27–29% in B; 26–29% in C) to avoid discontinuities. Full verbatim values from official PMK 168/2023 PDF deferred.
 - **PTKP detail editing beyond status code**
 - **NPWP vs non-NPWP surcharge** (20% surcharge for non-filers)
 - **Variable JKK rates by industry** (currently fixed at 0.24%, low-risk tier)
 - **Multi-component salary** (base + allowances, separate deductions)
+- **Year-end bonuses beyond THR** (performance bonus, 13th month, etc.)
 - **PDF export, save/share results**
