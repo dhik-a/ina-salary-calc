@@ -171,6 +171,8 @@ describe('computeAnnual', () => {
         const a = annualFor(gross, ptkp);
         const values = [
           a.gross,
+          a.thr,
+          a.grossIncludingThr,
           a.biayaJabatan,
           a.employee.kesehatan,
           a.employee.jht,

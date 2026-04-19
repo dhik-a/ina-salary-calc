@@ -55,7 +55,7 @@ src/
 │   ├── ter.ts            (TER bracket lookup)
 │   ├── constants.ts      (all tax rules as data)
 │   ├── calc.test.ts      (87 tests)
-│   └── annual.test.ts    (37 tests)
+│   └── annual.test.ts    (48 tests)
 └── components/
     └── (presentational React components)
 ```

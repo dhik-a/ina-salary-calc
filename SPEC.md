@@ -260,7 +260,7 @@ The app now models **THR** (religious holiday allowance), required by Permenaker
 - Annual gross: 120M + 10M = 130M
 - Biaya jabatan: 6M (capped)
 - Penghasilan neto, PKP, progressive annual tax all reflect the higher income
-- PPh 21 Annual is ≈600k higher than without THR
+- PPh 21 Annual is ≈1.3M higher than without THR (due to progressive brackets)
 
 ---
 

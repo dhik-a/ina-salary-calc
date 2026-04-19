@@ -11,7 +11,7 @@ function App() {
   const [period, setPeriod] = useState<Period>('monthly');
   const [includeThr, setIncludeThr] = useState(false);
   const [thrType, setThrType] = useState<ThrType>('full');
-  const [thrMonthsWorked, setThrMonthsWorked] = useState(12);
+  const [thrMonthsWorked, setThrMonthsWorked] = useState(11);
 
   const breakdown = calculate(gross, ptkp, {
     include: includeThr,
