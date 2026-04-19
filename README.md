@@ -10,7 +10,7 @@ All calculations run client-side. No data leaves the browser.
 
 - Vite 5 + React 18 + TypeScript
 - Tailwind CSS 3
-- Vitest 1 (124 tests: 87 monthly + 37 annual scenarios across all 8 PTKP statuses)
+- Vitest 1 (135 tests: 87 monthly + 48 annual scenarios across all 8 PTKP statuses and THR variations)
 
 ## What it calculates
 
@@ -79,8 +79,10 @@ npm run preview    # preview production build
   26–30% in C) are interpolated from category A's shape to fill gaps.
 - ✅ **Employer contributions** — informational view of total cost to company
   (gross + BPJS).
-- ✅ **Comprehensive test coverage** — 124 unit tests covering all bracket
-  boundaries, PKP rounding, biaya jabatan cap, and reconciliation scenarios.
+- ✅ **Comprehensive test coverage** — 135 unit tests covering all bracket
+  boundaries, PKP rounding, biaya jabatan cap, reconciliation scenarios, and THR variations.
+- ✅ **THR (Tunjangan Hari Raya)** — religious holiday allowance per Permenaker 6/2016;
+  full or pro-rated based on tenure. Optional; affects annual gross and progressive PPh 21.
 
 ## Known limitations
 
@@ -91,8 +93,8 @@ npm run preview    # preview production build
   payroll.
 - **JKK rate** — fixed at the 0.24% tier (low-risk). Actual rate varies by
   industry risk classification (0.24%–1.74%).
-- **Out of scope:** NPWP surcharge (20% for non-NPWP filers), THR (holiday
-  allowance), variable JKK tiers, multi-component salary, expatriate PTKP
+- **Out of scope:** NPWP surcharge (20% for non-NPWP filers), year-end bonuses
+  beyond THR, variable JKK tiers, multi-component salary, expatriate PTKP
   rules, scenario simulation.
 
 ## Disclaimer

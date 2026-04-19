@@ -211,6 +211,88 @@ describe('computeAnnual', () => {
   });
 });
 
+describe('THR (Tunjangan Hari Raya)', () => {
+  describe('THR disabled (regression)', () => {
+    it('compute annual with include=false gives same result as default', () => {
+      const r1 = calculate(10_000_000, 'TK/0');
+      const r2 = calculate(10_000_000, 'TK/0', { include: false, type: 'full', monthsWorked: 12 });
+      expect(r2.annual.thr).toBe(0);
+      expect(r2.annual.pph21Annual).toBe(r1.annual.pph21Annual);
+    });
+  });
+
+  describe('THR full', () => {
+    it('gross 10M TK/0, THR full → thr = 10M, grossIncludingThr = 130M', () => {
+      const r = calculate(10_000_000, 'TK/0', { include: true, type: 'full', monthsWorked: 12 });
+      expect(r.annual.thr).toBe(10_000_000);
+      expect(r.annual.grossIncludingThr).toBe(130_000_000);
+    });
+
+    it('THR full increases pph21Annual', () => {
+      const rWithout = calculate(10_000_000, 'TK/0', { include: false, type: 'full', monthsWorked: 12 });
+      const rWith = calculate(10_000_000, 'TK/0', { include: true, type: 'full', monthsWorked: 12 });
+      expect(rWith.annual.pph21Annual).toBeGreaterThan(rWithout.annual.pph21Annual);
+    });
+
+    it('pph21JanNov unchanged with THR full', () => {
+      const rWithout = calculate(10_000_000, 'TK/0', { include: false, type: 'full', monthsWorked: 12 });
+      const rWith = calculate(10_000_000, 'TK/0', { include: true, type: 'full', monthsWorked: 12 });
+      expect(rWith.annual.pph21JanNov).toBe(rWithout.annual.pph21JanNov);
+    });
+
+    it('cost to company grows by THR amount', () => {
+      const rWithout = calculate(10_000_000, 'TK/0', { include: false, type: 'full', monthsWorked: 12 });
+      const rWith = calculate(10_000_000, 'TK/0', { include: true, type: 'full', monthsWorked: 12 });
+      expect(rWith.annual.totalCostToCompany).toBe(rWithout.annual.totalCostToCompany + 10_000_000);
+    });
+  });
+
+  describe('THR pro-rated', () => {
+    it('months=6 → thr ≈ halfSalary', () => {
+      const r = calculate(10_000_000, 'TK/0', { include: true, type: 'prorated', monthsWorked: 6 });
+      expect(r.annual.thr).toBe(5_000_000);
+    });
+
+    it('months=1 → thr ≈ 1/12 salary', () => {
+      const r = calculate(10_000_000, 'TK/0', { include: true, type: 'prorated', monthsWorked: 1 });
+      const expected = Math.round(10_000_000 / 12);
+      expect(r.annual.thr).toBe(expected);
+    });
+
+    it('months=11 → thr ≈ 11/12 salary', () => {
+      const r = calculate(10_000_000, 'TK/0', { include: true, type: 'prorated', monthsWorked: 11 });
+      const expected = Math.round(10_000_000 * (11 / 12));
+      expect(r.annual.thr).toBe(expected);
+    });
+
+    it('pro-rated monotonicity: more months = higher THR', () => {
+      const r1 = calculate(10_000_000, 'TK/0', { include: true, type: 'prorated', monthsWorked: 1 });
+      const r6 = calculate(10_000_000, 'TK/0', { include: true, type: 'prorated', monthsWorked: 6 });
+      const r11 = calculate(10_000_000, 'TK/0', { include: true, type: 'prorated', monthsWorked: 11 });
+      expect(r1.annual.thr).toBeLessThan(r6.annual.thr);
+      expect(r6.annual.thr).toBeLessThan(r11.annual.thr);
+    });
+  });
+
+  describe('BPJS unchanged with THR', () => {
+    it('employee BPJS same with/without THR', () => {
+      const rWithout = calculate(10_000_000, 'TK/0', { include: false, type: 'full', monthsWorked: 12 });
+      const rWith = calculate(10_000_000, 'TK/0', { include: true, type: 'full', monthsWorked: 12 });
+      expect(rWith.annual.employee.kesehatan).toBe(rWithout.annual.employee.kesehatan);
+      expect(rWith.annual.employee.jht).toBe(rWithout.annual.employee.jht);
+      expect(rWith.annual.employee.jp).toBe(rWithout.annual.employee.jp);
+    });
+
+    it('employer BPJS same with/without THR', () => {
+      const rWithout = calculate(10_000_000, 'TK/0', { include: false, type: 'full', monthsWorked: 12 });
+      const rWith = calculate(10_000_000, 'TK/0', { include: true, type: 'full', monthsWorked: 12 });
+      expect(rWith.annual.employer.kesehatan).toBe(rWithout.annual.employer.kesehatan);
+      expect(rWith.annual.employer.jht).toBe(rWithout.annual.employer.jht);
+      expect(rWith.annual.employer.jp).toBe(rWithout.annual.employer.jp);
+    });
+  });
+});
+
 describe('calculate — annual field wired in', () => {
   it('exposes annual breakdown', () => {
     const r = calculate(10_000_000, 'TK/0');

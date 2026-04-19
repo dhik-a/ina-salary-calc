@@ -15,14 +15,31 @@ export function BreakdownDisplay({ breakdown, period }: BreakdownProps) {
     <div className="space-y-4">
       {/* Gross */}
       <div className="border-b pb-4">
-        <div className="flex justify-between items-center font-semibold text-lg">
-          <span>Gross Salary</span>
-          <span>
-            {isAnnual
-              ? formatRp(breakdown.annual.gross)
-              : formatRp(breakdown.gross)}
-          </span>
-        </div>
+        {isAnnual && breakdown.annual.thr > 0 ? (
+          <>
+            <div className="flex justify-between items-center font-semibold text-base mb-2">
+              <span>Gross Salary (×12)</span>
+              <span>{formatRp(breakdown.annual.gross)}</span>
+            </div>
+            <div className="flex justify-between items-center font-semibold text-base mb-2">
+              <span>THR</span>
+              <span>{formatRp(breakdown.annual.thr)}</span>
+            </div>
+            <div className="flex justify-between items-center font-semibold text-lg border-t pt-2">
+              <span>Total Annual Gross</span>
+              <span>{formatRp(breakdown.annual.grossIncludingThr)}</span>
+            </div>
+          </>
+        ) : (
+          <div className="flex justify-between items-center font-semibold text-lg">
+            <span>Gross Salary</span>
+            <span>
+              {isAnnual
+                ? formatRp(breakdown.annual.gross)
+                : formatRp(breakdown.gross)}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Employee Deductions */}

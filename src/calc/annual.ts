@@ -1,6 +1,7 @@
 import {
   PtkpStatus,
   AnnualBreakdown,
+  ThrOptions,
   PTKP_ANNUAL,
   BIAYA_JABATAN_RATE,
   BIAYA_JABATAN_ANNUAL_CAP,
@@ -25,14 +26,25 @@ export function applyProgressive(pkp: number, brackets: ProgressiveBracket[]): n
   return Math.round(tax);
 }
 
+function computeThrAmount(grossMonthly: number, opts: ThrOptions): number {
+  if (!opts.include) return 0;
+  if (opts.type === 'full') return grossMonthly;
+  const months = Math.max(1, Math.min(11, Math.floor(opts.monthsWorked)));
+  return Math.round(grossMonthly * (months / 12));
+}
+
 export function computeAnnual(
   grossMonthly: number,
   ptkpStatus: PtkpStatus,
   monthlyBpjs: BpjsResult,
-  monthlyPph21: number
+  monthlyPph21: number,
+  thrOptions: ThrOptions = { include: false, type: 'full', monthsWorked: 12 }
 ): AnnualBreakdown {
   const gross = grossMonthly * 12;
-  const biayaJabatan = Math.min(Math.round(gross * BIAYA_JABATAN_RATE), BIAYA_JABATAN_ANNUAL_CAP);
+  const thr = computeThrAmount(grossMonthly, thrOptions);
+  const grossIncludingThr = gross + thr;
+
+  const biayaJabatan = Math.min(Math.round(grossIncludingThr * BIAYA_JABATAN_RATE), BIAYA_JABATAN_ANNUAL_CAP);
 
   const employee = {
     kesehatan: monthlyBpjs.employee.kesehatan * 12,
@@ -50,7 +62,7 @@ export function computeAnnual(
   // Per PMK 168/2023 + Per-Dirjen PER-16/PJ/2016: deductible from gross for PPh 21
   // are biaya jabatan + employee JHT + employee JP.
   // BPJS Kesehatan employee contribution is NOT deducted (conservative DJP interpretation).
-  const penghasilanNeto = gross - biayaJabatan - employee.jht - employee.jp;
+  const penghasilanNeto = grossIncludingThr - biayaJabatan - employee.jht - employee.jp;
   const ptkp = PTKP_ANNUAL[ptkpStatus];
   const pkpRaw = Math.max(0, penghasilanNeto - ptkp);
   const pkp = Math.floor(pkpRaw / 1000) * 1000; // round down to nearest 1,000
@@ -60,13 +72,15 @@ export function computeAnnual(
   const pph21December = pph21Annual - pph21JanNov; // may be negative (refund)
 
   const totalEmployeeDeduction = employee.kesehatan + employee.jht + employee.jp + pph21Annual;
-  const net = gross - totalEmployeeDeduction;
+  const net = grossIncludingThr - totalEmployeeDeduction;
 
   const totalEmployerContribution = employer.kesehatan + employer.jht + employer.jp + employer.jkk + employer.jkm;
-  const totalCostToCompany = gross + totalEmployerContribution;
+  const totalCostToCompany = grossIncludingThr + totalEmployerContribution;
 
   return {
     gross,
+    thr,
+    grossIncludingThr,
     biayaJabatan,
     employee,
     employer,

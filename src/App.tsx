@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PtkpStatus, Period } from './calc/constants';
+import { PtkpStatus, Period, ThrType } from './calc/constants';
 import { calculate } from './calc/calculate';
 import { SalaryForm } from './components/SalaryForm';
 import { BreakdownDisplay } from './components/Breakdown';
@@ -9,8 +9,15 @@ function App() {
   const [gross, setGross] = useState(0);
   const [ptkp, setPtkp] = useState<PtkpStatus>('TK/0');
   const [period, setPeriod] = useState<Period>('monthly');
+  const [includeThr, setIncludeThr] = useState(false);
+  const [thrType, setThrType] = useState<ThrType>('full');
+  const [thrMonthsWorked, setThrMonthsWorked] = useState(12);
 
-  const breakdown = calculate(gross, ptkp);
+  const breakdown = calculate(gross, ptkp, {
+    include: includeThr,
+    type: thrType,
+    monthsWorked: thrMonthsWorked,
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-8 px-4">
@@ -30,6 +37,12 @@ function App() {
                 onPtkpChange={setPtkp}
                 period={period}
                 onPeriodChange={setPeriod}
+                includeThr={includeThr}
+                onIncludeThrChange={setIncludeThr}
+                thrType={thrType}
+                onThrTypeChange={setThrType}
+                thrMonthsWorked={thrMonthsWorked}
+                onThrMonthsWorkedChange={setThrMonthsWorked}
               />
             </div>
 

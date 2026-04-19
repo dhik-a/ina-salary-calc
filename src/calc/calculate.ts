@@ -1,9 +1,13 @@
-import { Breakdown, PtkpStatus } from './constants';
+import { Breakdown, PtkpStatus, ThrOptions } from './constants';
 import { lookupTerRate } from './ter';
 import { computeBpjs } from './bpjs';
 import { computeAnnual } from './annual';
 
-export function calculate(grossMonthly: number, ptkpStatus: PtkpStatus): Breakdown {
+export function calculate(
+  grossMonthly: number,
+  ptkpStatus: PtkpStatus,
+  thrOptions: ThrOptions = { include: false, type: 'full', monthsWorked: 12 }
+): Breakdown {
   const bpjs = computeBpjs(grossMonthly);
   const terRate = lookupTerRate(grossMonthly, ptkpStatus);
   const pph21 = Math.round(grossMonthly * terRate);
@@ -22,7 +26,7 @@ export function calculate(grossMonthly: number, ptkpStatus: PtkpStatus): Breakdo
 
   const totalCostToCompany = grossMonthly + totalEmployerContribution;
 
-  const annual = computeAnnual(grossMonthly, ptkpStatus, bpjs, pph21);
+  const annual = computeAnnual(grossMonthly, ptkpStatus, bpjs, pph21, thrOptions);
 
   return {
     gross: grossMonthly,
