@@ -149,8 +149,8 @@ describe('computeAnnual', () => {
       expect(a.pph21December).toBeGreaterThan(0);
     });
 
-    it('pph21Annual = pph21JanNov + pph21December', () => {
-      expect(a.pph21Annual).toBe(a.pph21JanNov + a.pph21December);
+    it('pph21Annual = pph21JanNov + pph21December + pph21Thr', () => {
+      expect(a.pph21Annual).toBe(a.pph21JanNov + a.pph21December + a.pph21Thr);
     });
 
     it('net = gross − total employee deductions', () => {
@@ -273,6 +273,35 @@ describe('THR (Tunjangan Hari Raya)', () => {
       const r11 = calculate(10_000_000, 'TK/0', { include: true, type: 'prorated', monthsWorked: 11 });
       expect(r1.annual.thr).toBeLessThan(r6.annual.thr);
       expect(r6.annual.thr).toBeLessThan(r11.annual.thr);
+    });
+  });
+
+  describe('pph21Thr marginal split', () => {
+    it('pph21Thr = 0 when THR disabled', () => {
+      const r = calculate(10_000_000, 'TK/0', { include: false, type: 'full', monthsWorked: 12 });
+      expect(r.annual.pph21Thr).toBe(0);
+    });
+
+    it('pph21Thr > 0 when THR enabled', () => {
+      const r = calculate(10_000_000, 'TK/0', { include: true, type: 'full', monthsWorked: 12 });
+      expect(r.annual.pph21Thr).toBeGreaterThan(0);
+    });
+
+    it('pph21Thr = pph21Annual(with) − pph21Annual(without)', () => {
+      const rWith = calculate(10_000_000, 'TK/0', { include: true, type: 'full', monthsWorked: 12 });
+      const rWithout = calculate(10_000_000, 'TK/0', { include: false, type: 'full', monthsWorked: 12 });
+      expect(rWith.annual.pph21Thr).toBe(rWith.annual.pph21Annual - rWithout.annual.pph21Annual);
+    });
+
+    it('pph21December with THR is salary-only reconciliation', () => {
+      const rWith = calculate(10_000_000, 'TK/0', { include: true, type: 'full', monthsWorked: 12 });
+      const rWithout = calculate(10_000_000, 'TK/0', { include: false, type: 'full', monthsWorked: 12 });
+      expect(rWith.annual.pph21December).toBe(rWithout.annual.pph21December);
+    });
+
+    it('pph21Annual = pph21JanNov + pph21December + pph21Thr (with THR)', () => {
+      const r = calculate(10_000_000, 'TK/0', { include: true, type: 'full', monthsWorked: 12 });
+      expect(r.annual.pph21Annual).toBe(r.annual.pph21JanNov + r.annual.pph21December + r.annual.pph21Thr);
     });
   });
 

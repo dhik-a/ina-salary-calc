@@ -15,7 +15,7 @@ export type TranslationKey =
   // Breakdown — deductions
   | 'deductionsHeading'
   | 'pph21JanNov'
-  | 'pph21December' | 'pph21AnnualTotal'
+  | 'pph21December' | 'pph21Thr' | 'pph21AnnualTotal'
   | 'pph21Monthly'
   | 'bpjsKesehatan1' | 'bpjsJht2' | 'bpjsJp1'
   | 'jpCap'
@@ -54,7 +54,8 @@ export const translations: Translations = {
     grossSalary: 'Gaji Bruto',
     deductionsHeading: 'Potongan (Karyawan)',
     pph21JanNov: 'PPh 21 Jan–Nov (TER {rate}%)',
-    pph21December: 'PPh 21 Desember (rekonsiliasi)',
+    pph21December: 'PPh 21 Desember (rekonsiliasi gaji)',
+    pph21Thr: 'PPh 21 THR',
     pph21AnnualTotal: 'Total PPh 21 Tahunan',
     pph21Monthly: 'PPh 21 (TER {rate}%)',
     bpjsKesehatan1: 'BPJS Kesehatan (1%)',
@@ -104,7 +105,8 @@ export const translations: Translations = {
     grossSalary: 'Gross Salary',
     deductionsHeading: 'Deductions (Employee)',
     pph21JanNov: 'PPh 21 Jan–Nov (TER {rate}%)',
-    pph21December: 'PPh 21 December (reconciliation)',
+    pph21December: 'PPh 21 December (salary reconciliation)',
+    pph21Thr: 'PPh 21 on THR',
     pph21AnnualTotal: 'PPh 21 Annual Total',
     pph21Monthly: 'PPh 21 (TER {rate}%)',
     bpjsKesehatan1: 'BPJS Kesehatan (1%)',

@@ -244,11 +244,11 @@ The app now models **THR** (religious holiday allowance), required by Permenaker
 
 **Tax treatment:**
 - THR is subject to PPh 21 but **not** to BPJS (BPJS wage basis excludes non-recurring bonuses).
-- In this calculator, the tax impact is folded into the annual progressive calculation:
-  - Annual gross for tax purposes = `(salary × 12) + THR`
-  - This feeds into biaya jabatan → PKP → progressive Pasal 17 → annual PPh 21
-  - Jan–Nov TER stays based on salary alone (11 months)
-  - The THR-driven tax increase lands in the December reconciliation line
+- PPh 21 on THR is calculated via the **marginal method** (per PMK 168/2023 intent for non-periodic income):
+  - `pph21Thr = Pasal17(PKP_with_THR) − Pasal17(PKP_without_THR)`
+  - This is the amount withheld at the time of THR payment.
+  - `pph21December` covers **salary reconciliation only** = `Pasal17(PKP_without_THR) − pph21JanNov`
+  - Total invariant: `pph21Annual = pph21JanNov + pph21December + pph21Thr`
 
 **UI:**
 - THR controls appear **only** in the annual view
@@ -266,7 +266,6 @@ The app now models **THR** (religious holiday allowance), required by Permenaker
 
 ## Out of Scope (Next Phases)
 
-- **Alternative withholding methods** — App assumes TER Jan–Nov → progressive reconciliation in December (with THR impact lumped into December). Some employers use progressive monthly withholding or month-specific THR withholding; actual Jan–Nov PPh 21 may differ slightly from TER.
 - **TER Lampiran B & C full transcription** — Category B and C brackets are interpolated for upper rates (27–29% in B; 26–29% in C) to avoid discontinuities. Full verbatim values from official PMK 168/2023 PDF deferred.
 - **PTKP detail editing beyond status code**
 - **NPWP vs non-NPWP surcharge** (20% surcharge for non-filers)
