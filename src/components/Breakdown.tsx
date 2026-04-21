@@ -69,6 +69,14 @@ export function BreakdownDisplay({ breakdown, period }: BreakdownProps) {
                   {formatRp(Math.abs(breakdown.annual.pph21December))}
                 </span>
               </div>
+              {breakdown.annual.thr > 0 && (
+                <div className="flex justify-between">
+                  <span>{t('pph21Thr')}</span>
+                  <span className="text-red-600">
+                    −{formatRp(breakdown.annual.pph21Thr)}
+                  </span>
+                </div>
+              )}
               <div className="flex justify-between font-semibold text-gray-700">
                 <span>{t('pph21AnnualTotal')}</span>
                 <span className="text-red-600">

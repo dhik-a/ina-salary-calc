@@ -22,6 +22,7 @@ export interface AnnualBreakdown {
   pph21Annual: number;
   pph21JanNov: number;
   pph21December: number;
+  pph21Thr: number;
   totalEmployeeDeduction: number;
   net: number;
   totalCostToCompany: number;

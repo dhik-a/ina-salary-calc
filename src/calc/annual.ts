@@ -69,7 +69,15 @@ export function computeAnnual(
 
   const pph21Annual = applyProgressive(pkp, PASAL_17_BRACKETS);
   const pph21JanNov = monthlyPph21 * 11;
-  const pph21December = pph21Annual - pph21JanNov; // may be negative (refund)
+
+  // Marginal PPh 21 on THR: compute PKP on salary-only to isolate the THR tax impact
+  const biayaJabatanNoThr = Math.min(Math.round(gross * BIAYA_JABATAN_RATE), BIAYA_JABATAN_ANNUAL_CAP);
+  const penghasilanNetoNoThr = gross - biayaJabatanNoThr - employee.jht - employee.jp;
+  const pkpRawNoThr = Math.max(0, penghasilanNetoNoThr - ptkp);
+  const pkpNoThr = Math.floor(pkpRawNoThr / 1000) * 1000;
+  const pph21WithoutThr = applyProgressive(pkpNoThr, PASAL_17_BRACKETS);
+  const pph21Thr = pph21Annual - pph21WithoutThr; // 0 when no THR
+  const pph21December = pph21WithoutThr - pph21JanNov; // salary reconciliation only; may be negative (refund)
 
   const totalEmployeeDeduction = employee.kesehatan + employee.jht + employee.jp + pph21Annual;
   const net = grossIncludingThr - totalEmployeeDeduction;
@@ -90,6 +98,7 @@ export function computeAnnual(
     pph21Annual,
     pph21JanNov,
     pph21December,
+    pph21Thr,
     totalEmployeeDeduction,
     net,
     totalCostToCompany,
