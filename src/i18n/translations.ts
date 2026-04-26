@@ -28,7 +28,14 @@ export type TranslationKey =
   | 'disclaimerLabel' | 'disclaimerText1' | 'disclaimerBold' | 'disclaimerText2'
   | 'annualLabel' | 'annualText'
   | 'regulationsLabel'
-  | 'regPmk168' | 'regPerpres64' | 'regPp44' | 'regPp45' | 'regPp46';
+  | 'regPmk168' | 'regPerpres64' | 'regPp44' | 'regPp45' | 'regPp46'
+  // Tabs / nav
+  | 'tabGrossToNet' | 'tabNetToGross'
+  // Net→Gross page
+  | 'netSalaryLabel' | 'unreachableNetError'
+  | 'flatZoneAlert' | 'flatZoneSmallest' | 'flatZoneLargest' | 'flatZoneMidpoint'
+  | 'grossAccuracyDisclaimer'
+  | 'computedGrossLabel' | 'emptyStateNet';
 
 type Translations = Record<Language, Record<TranslationKey, string>>;
 
@@ -83,6 +90,17 @@ export const translations: Translations = {
     regPp44: 'JKK & JKM',
     regPp45: 'Jaminan Pensiun (JP)',
     regPp46: 'Jaminan Hari Tua (JHT)',
+    tabGrossToNet: 'Hitung Gaji Bersih',
+    tabNetToGross: 'Hitung Gaji Kotor',
+    netSalaryLabel: 'Gaji Bersih (Bulanan)',
+    unreachableNetError: 'Tidak ada gaji bruto yang menghasilkan gaji bersih ini.',
+    flatZoneAlert: 'Beberapa nilai gaji bruto menghasilkan gaji bersih yang sama. Pilih nilai mana yang ingin ditampilkan:',
+    flatZoneSmallest: 'Terkecil',
+    flatZoneLargest: 'Terbesar',
+    flatZoneMidpoint: 'Tengah',
+    grossAccuracyDisclaimer: 'Hasil gaji bruto adalah perkiraan. Pembulatan pada BPJS/PPh 21 dan batas tarif TER dapat menyebabkan selisih kecil dari gaji bersih yang dimasukkan. Verifikasi ulang dengan kalkulator Hitung Gaji Bersih sebelum digunakan untuk kontrak.',
+    computedGrossLabel: 'Gaji Bruto (Hasil)',
+    emptyStateNet: 'Masukkan gaji bersih untuk melihat rincian',
   },
   en: {
     appTitle: 'Salary Calculator',
@@ -134,5 +152,16 @@ export const translations: Translations = {
     regPp44: 'JKK & JKM',
     regPp45: 'Jaminan Pensiun (JP)',
     regPp46: 'Jaminan Hari Tua (JHT)',
+    tabGrossToNet: 'Net Salary Calculator',
+    tabNetToGross: 'Gross Salary Calculator',
+    netSalaryLabel: 'Net Salary (Monthly)',
+    unreachableNetError: 'No gross salary produces this net.',
+    flatZoneAlert: 'Multiple gross values produce the same net. Choose which one to display:',
+    flatZoneSmallest: 'Smallest',
+    flatZoneLargest: 'Largest',
+    flatZoneMidpoint: 'Midpoint',
+    grossAccuracyDisclaimer: 'The computed gross is an approximation. Rounding in BPJS/PPh 21 and TER bracket boundaries may cause small deviations from the entered net. Cross-check against the Net Salary Calculator before using for contracts.',
+    computedGrossLabel: 'Gross Salary (Result)',
+    emptyStateNet: 'Enter a net salary to see the breakdown',
   },
 };
