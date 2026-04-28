@@ -106,16 +106,42 @@ function solveMonthlyCandidate(
   return MAX_GROSS;
 }
 
+// Scan limit for post-bisection refinement in annual mode. Annual net has small
+// dips (~150 Rp) every ~91 Rp of monthly gross caused by floor(pkpRaw/1000)*1000
+// rounding in the progressive tax calculation. A 200-step backward scan covers
+// two full rounding cycles and finds the closest (or exact) gross.
+const ANNUAL_SCAN_BACK = 200;
+
 function solveAnnualCandidate(
   targetNet: number,
   ptkp: PtkpStatus,
   thrOpts: ThrOptions,
 ): number {
-  // Annual net is monotonic non-decreasing in monthly gross because pph21Annual
-  // is derived via the continuous progressive Pasal 17 function on PKP, and all
-  // BPJS / biaya-jabatan components are non-decreasing.
-  const result = bisectSmallestGEQ(targetNet, 0, MAX_GROSS, ptkp, 'annually', thrOpts);
-  return result ?? MAX_GROSS;
+  // Bisection gives the smallest gross with annual.net >= target. Due to small
+  // dips from PKP floor-rounding, the exact target may sit just below this
+  // candidate. Scan backward to minimise the absolute difference.
+  const bisectResult = bisectSmallestGEQ(targetNet, 0, MAX_GROSS, ptkp, 'annually', thrOpts);
+  const candidate = bisectResult ?? MAX_GROSS;
+  const candidateNet = netFromGross(candidate, ptkp, 'annually', thrOpts);
+
+  if (candidateNet === targetNet) return candidate;
+
+  let bestGross = candidate;
+  let bestDiff = Math.abs(candidateNet - targetNet);
+
+  for (let g = candidate - 1; g >= Math.max(0, candidate - ANNUAL_SCAN_BACK); g--) {
+    const gNet = netFromGross(g, ptkp, 'annually', thrOpts);
+    const diff = Math.abs(gNet - targetNet);
+    if (diff < bestDiff) {
+      bestGross = g;
+      bestDiff = diff;
+      if (diff === 0) break;
+    } else if (gNet < targetNet && diff > bestDiff) {
+      // Heading away from target going down; no improvement possible.
+      break;
+    }
+  }
+  return bestGross;
 }
 
 export function solveGrossFromNet(

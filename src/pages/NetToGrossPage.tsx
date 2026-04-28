@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { PtkpStatus, Period, ThrType } from '../calc/constants';
 import { calculate } from '../calc/calculate';
+import { formatRupiah } from '../calc/format';
 import {
   solveGrossFromNet,
   UnreachableNetError,
@@ -77,17 +78,33 @@ export function NetToGrossPage() {
               {t('unreachableNetError')}
             </div>
           )}
-          {outcome.kind === 'ok' && (
-            <>
-              {outcome.result.flatZone.min < outcome.result.flatZone.max && (
-                <FlatZoneAlert policy={flatZonePolicy} onChange={setFlatZonePolicy} />
-              )}
-              <BreakdownDisplay
-                breakdown={calculate(outcome.result.gross, ptkp, thrOpts)}
-                period={period}
-              />
-            </>
-          )}
+          {outcome.kind === 'ok' && (() => {
+            const breakdown = calculate(outcome.result.gross, ptkp, thrOpts);
+            return (
+              <>
+                {/* Hero: computed gross */}
+                <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-lg mb-4">
+                  <div className="text-sm text-indigo-700 font-medium mb-1">
+                    {t('computedGrossLabel')}
+                  </div>
+                  <div className="text-2xl font-bold text-indigo-800">
+                    {formatRupiah(outcome.result.gross)}
+                  </div>
+                  {period === 'monthly' && (
+                    <div className="text-xs text-indigo-600 mt-1">
+                      / {t('monthly').toLowerCase()}
+                    </div>
+                  )}
+                </div>
+
+                {outcome.result.flatZone.min < outcome.result.flatZone.max && (
+                  <FlatZoneAlert policy={flatZonePolicy} onChange={setFlatZonePolicy} />
+                )}
+
+                <BreakdownDisplay breakdown={breakdown} period={period} />
+              </>
+            );
+          })()}
         </div>
       </div>
     </div>
