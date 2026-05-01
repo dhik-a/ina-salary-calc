@@ -33,7 +33,7 @@ export function NetToGrossPage() {
   const outcome = useMemo<SolveOutcome>(() => {
     if (net === 0) return { kind: 'empty' };
     try {
-      const result = solveGrossFromNet(net, ptkp, period, thrOpts, flatZonePolicy);
+      const result = solveGrossFromNet(net, ptkp, 'monthly', thrOpts, flatZonePolicy);
       return { kind: 'ok', result };
     } catch (e) {
       if (e instanceof UnreachableNetError) return { kind: 'error' };
@@ -90,9 +90,12 @@ export function NetToGrossPage() {
                   <div className="text-2xl font-bold text-indigo-800">
                     {formatRupiah(outcome.result.gross)}
                   </div>
-                  {period === 'monthly' && (
-                    <div className="text-xs text-indigo-600 mt-1">
-                      / {t('monthly').toLowerCase()}
+                  <div className="text-xs text-indigo-600 mt-1">
+                    / {t('monthly').toLowerCase()}
+                  </div>
+                  {period === 'annually' && (
+                    <div className="text-xs text-indigo-500 mt-0.5">
+                      = {formatRupiah(breakdown.annual.grossIncludingThr)} / {t('annually').toLowerCase()}
                     </div>
                   )}
                 </div>

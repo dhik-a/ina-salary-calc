@@ -99,7 +99,7 @@ export const translations: Translations = {
     flatZoneLargest: 'Terbesar',
     flatZoneMidpoint: 'Tengah',
     grossAccuracyDisclaimer: 'Hasil gaji bruto adalah perkiraan. Pembulatan pada BPJS/PPh 21 dan batas tarif TER dapat menyebabkan selisih kecil dari gaji bersih yang dimasukkan. Verifikasi ulang dengan kalkulator Hitung Gaji Bersih sebelum digunakan untuk kontrak.',
-    computedGrossLabel: 'Gaji Bruto (Hasil)',
+    computedGrossLabel: 'Gaji Bruto Bulanan (Hasil)',
     emptyStateNet: 'Masukkan gaji bersih untuk melihat rincian',
   },
   en: {
@@ -161,7 +161,7 @@ export const translations: Translations = {
     flatZoneLargest: 'Largest',
     flatZoneMidpoint: 'Midpoint',
     grossAccuracyDisclaimer: 'The computed gross is an approximation. Rounding in BPJS/PPh 21 and TER bracket boundaries may cause small deviations from the entered net. Cross-check against the Net Salary Calculator before using for contracts.',
-    computedGrossLabel: 'Gross Salary (Result)',
+    computedGrossLabel: 'Monthly Gross Salary (Result)',
     emptyStateNet: 'Enter a net salary to see the breakdown',
   },
 };
