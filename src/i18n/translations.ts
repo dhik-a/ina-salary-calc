@@ -29,6 +29,7 @@ export type TranslationKey =
   | 'annualLabel' | 'annualText'
   | 'regulationsLabel'
   | 'regPmk168' | 'regPerpres64' | 'regPp44' | 'regPp45' | 'regPp46'
+  | 'aboutLink' | 'privacyLink'
   // Tabs / nav
   | 'tabGrossToNet' | 'tabNetToGross'
   // Net→Gross page
@@ -90,6 +91,8 @@ export const translations: Translations = {
     regPp44: 'JKK & JKM',
     regPp45: 'Jaminan Pensiun (JP)',
     regPp46: 'Jaminan Hari Tua (JHT)',
+    aboutLink: 'Tentang',
+    privacyLink: 'Privasi',
     tabGrossToNet: 'Hitung Gaji Bersih',
     tabNetToGross: 'Hitung Gaji Kotor',
     netSalaryLabel: 'Gaji Bersih (Bulanan)',
@@ -152,6 +155,8 @@ export const translations: Translations = {
     regPp44: 'JKK & JKM',
     regPp45: 'Jaminan Pensiun (JP)',
     regPp46: 'Jaminan Hari Tua (JHT)',
+    aboutLink: 'About',
+    privacyLink: 'Privacy',
     tabGrossToNet: 'Net Salary Calculator',
     tabNetToGross: 'Gross Salary Calculator',
     netSalaryLabel: 'Net Salary (Monthly)',

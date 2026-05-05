@@ -3,6 +3,7 @@ import { PtkpStatus, Period, ThrType } from '../calc/constants';
 import { calculate } from '../calc/calculate';
 import { SalaryForm } from '../components/SalaryForm';
 import { BreakdownDisplay } from '../components/Breakdown';
+import { AdSlot } from '../components/AdSlot';
 import { useLang } from '../i18n/useLang';
 
 export function GrossToNetPage() {
@@ -42,9 +43,12 @@ export function GrossToNetPage() {
       <div>
         <h2 className="text-lg font-semibold text-gray-700 mb-4">{t('breakdownHeading')}</h2>
         {gross === 0 ? (
-          <div className="bg-gray-100 p-6 rounded-lg text-center text-gray-500">
-            {t('emptyState')}
-          </div>
+          <>
+            <div className="bg-gray-100 p-6 rounded-lg text-center text-gray-500">
+              {t('emptyState')}
+            </div>
+            <AdSlot slot="2222222222" className="mt-4" style={{ minHeight: 250 }} />
+          </>
         ) : (
           <BreakdownDisplay breakdown={breakdown} period={period} />
         )}

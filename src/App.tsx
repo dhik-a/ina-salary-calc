@@ -4,8 +4,11 @@ import { LanguageToggle } from './components/LanguageToggle';
 import { useLang } from './i18n/useLang';
 import { Footer } from './components/Footer';
 import { TabNav } from './components/TabNav';
+import { AdSlot } from './components/AdSlot';
 import { GrossToNetPage } from './pages/GrossToNetPage';
 import { NetToGrossPage } from './pages/NetToGrossPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { AboutPage } from './pages/AboutPage';
 
 function AppLayout() {
   const { t, lang, setLang } = useLang();
@@ -23,6 +26,7 @@ function AppLayout() {
             <Outlet />
           </div>
         </div>
+        <AdSlot slot="1111111111" className="mt-4" style={{ minHeight: 100 }} />
         <Footer />
       </div>
     </div>
@@ -37,6 +41,8 @@ function App() {
           <Route path="/" element={<Navigate to="/hitung-gaji-bersih" replace />} />
           <Route path="/hitung-gaji-bersih" element={<GrossToNetPage />} />
           <Route path="/hitung-gaji-kotor" element={<NetToGrossPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/about" element={<AboutPage />} />
         </Route>
       </Routes>
     </LanguageProvider>

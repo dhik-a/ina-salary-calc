@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useLang } from '../i18n/useLang';
 
 interface RegulationLink {
@@ -39,6 +40,14 @@ export function Footer() {
 
   return (
     <footer className="max-w-2xl mx-auto mt-6 text-xs text-gray-500 space-y-3 px-2">
+      <div className="flex gap-4 text-blue-600">
+        <Link to="/about" className="hover:underline">
+          {t('aboutLink')}
+        </Link>
+        <Link to="/privacy" className="hover:underline">
+          {t('privacyLink')}
+        </Link>
+      </div>
       <p className="leading-relaxed">
         <span className="font-semibold text-gray-700">{t('disclaimerLabel')}</span>{' '}
         {t('disclaimerText1')}
