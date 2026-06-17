@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 import { useEffect, useRef } from 'react';
 
 declare global {
