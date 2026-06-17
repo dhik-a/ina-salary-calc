@@ -11,7 +11,6 @@ import {
 import { NetSalaryForm } from '../components/NetSalaryForm';
 import { BreakdownDisplay } from '../components/Breakdown';
 import { FlatZoneAlert } from '../components/FlatZoneAlert';
-import { AdSlot } from '../components/AdSlot';
 import { useLang } from '../i18n/useLang';
 
 type SolveOutcome =
@@ -70,12 +69,9 @@ export function NetToGrossPage() {
         <div>
           <h2 className="text-lg font-semibold text-gray-700 mb-4">{t('breakdownHeading')}</h2>
           {outcome.kind === 'empty' && (
-            <>
-              <div className="bg-gray-100 p-6 rounded-lg text-center text-gray-500">
-                {t('emptyStateNet')}
-              </div>
-              <AdSlot slot="2222222222" className="mt-4" style={{ minHeight: 250 }} />
-            </>
+            <div className="bg-gray-100 p-6 rounded-lg text-center text-gray-500">
+              {t('emptyStateNet')}
+            </div>
           )}
           {outcome.kind === 'error' && (
             <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg text-sm">
