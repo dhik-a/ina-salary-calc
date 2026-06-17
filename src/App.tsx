@@ -13,7 +13,7 @@ function AppLayout() {
   const { t, lang, setLang } = useLang();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 pt-8 pb-4 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="flex justify-between items-start mb-4">
