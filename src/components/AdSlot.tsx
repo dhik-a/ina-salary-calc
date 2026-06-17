@@ -1,6 +1,10 @@
-/// <reference types="vite/client" />
-
 import { useEffect, useRef } from 'react';
+
+declare global {
+  interface Window {
+    adsbygoogle: unknown[];
+  }
+}
 
 interface AdSlotProps {
   slot: string;
